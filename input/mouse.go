@@ -42,8 +42,8 @@ func mousePosHandler(mx int, my int) {
 	if curButton == 0 && curButtonState == 1 {
 
 		// target size is 640, so adjust accordingly for panning speed
-		TransX += float64(mx - prevX)/Zoom*float64(Sim.Size)/640
-		TransY += float64(my - prevY)/Zoom*float64(Sim.Size)/640
+		TransX += float64(mx-prevX) / Zoom * float64(Sim.Size) / 640
+		TransY += float64(my-prevY) / Zoom * float64(Sim.Size) / 640
 
 		prevX, prevY = mx, my
 	}
@@ -82,8 +82,8 @@ func drawAt(mx, my int) {
 	dx, dy := TransX-0.5, TransY-0.5
 	w := float64(640)
 
-	row := ((y/z)-dy)*s/w
-	col := ((x/z)-dx)*s/w
+	row := ((y / z) - dy) * s / w
+	col := ((x / z) - dx) * s / w
 
 	log.Print(row, col)
 	pos := Sim.Pos(int(row), int(col))
@@ -91,5 +91,3 @@ func drawAt(mx, my int) {
 		Sim.Cells[pos] = true
 	}
 }
-
-

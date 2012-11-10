@@ -1,8 +1,8 @@
 package input
 
 import (
-	"github.com/jteeuwen/glfw"
 	"dasa.cc/cell/automata"
+	"github.com/jteeuwen/glfw"
 )
 
 var Sim *automata.Life

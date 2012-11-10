@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
-	"time"
 	"os"
+	"time"
 )
 
 type Life struct {
@@ -37,7 +37,7 @@ func NewLife(size int, delay string, seed int64) (l *Life) {
 			l.Cells[i] = (rand.Int() % 2) == 0
 		}
 	} else {
-		i := size/2
+		i := size / 2
 		l.Cells[i-1] = true
 		l.Cells[i] = true
 		l.Cells[i+1] = true
@@ -47,7 +47,7 @@ func NewLife(size int, delay string, seed int64) (l *Life) {
 }
 
 func (l *Life) Pos(row, col int) int {
-	return (row*l.Size)+col
+	return (row * l.Size) + col
 }
 
 func (l *Life) BoundValue(i int) int {
@@ -70,9 +70,9 @@ func (l *Life) MakeObject(name string) {
 	defer f.Close()
 
 	/*
-	for _, coord := range coords {
-		l.Cells[l.Pos(coord[0], coord[1])] = true
-	}
+		for _, coord := range coords {
+			l.Cells[l.Pos(coord[0], coord[1])] = true
+		}
 	*/
 }
 
@@ -98,7 +98,7 @@ func (l *Life) Done() bool {
 
 func (l *Life) IsAlive(i int) bool {
 	count := 0
-	var t, tl, tr bool
+	//var t, tl, tr bool
 
 	// Each cell has eight neighbors. For cells along the grid boundary,
 	// neighbors are considered by wrapping the grid
@@ -116,7 +116,7 @@ func (l *Life) IsAlive(i int) bool {
 	// top
 	if l.Cells[l.BoundValue(i-l.Size)] {
 		count++
-		t = true
+		//t = true
 	}
 
 	// bottom
@@ -127,13 +127,13 @@ func (l *Life) IsAlive(i int) bool {
 	// top left
 	if l.Cells[l.BoundValue(i-(l.Size-1))] {
 		count++
-		tl = true
+		//tl = true
 	}
 
 	// top right
 	if l.Cells[l.BoundValue(i-(l.Size+1))] {
 		count++
-		tr = true
+		//tr = true
 	}
 
 	// bottom left
@@ -147,7 +147,7 @@ func (l *Life) IsAlive(i int) bool {
 	}
 
 	// the rules of life
-	/*
+
 	if l.Cells[i] && (count == 2 || count == 3) {
 		return true
 	}
@@ -155,31 +155,32 @@ func (l *Life) IsAlive(i int) bool {
 		return true
 	}
 	return false
+
+	/*
+		if tl && t && tr {
+			return false
+		}
+		if tl && t && !tr {
+			return false
+		}
+		if tl && !t && tr {
+			return false
+		}
+		if tl && !t && !tr {
+			return true
+		}
+		if !tl && t && tr {
+			return false
+		}
+		if !tl && t && !tr {
+			return false
+		}
+		if !tl && !t && tr {
+			return true
+		}
+
+		return l.Cells[i]
 	*/
-
-	if tl && t && tr {
-		return false
-	}
-	if tl && t && !tr {
-		return false
-	}
-	if tl && !t && tr {
-		return false
-	}
-	if tl && !t && !tr {
-		return true
-	}
-	if !tl && t && tr {
-		return false
-	}
-	if !tl && t && !tr {
-		return false
-	}
-	if !tl && !t && tr {
-		return true
-	}
-
-	return l.Cells[i]
 }
 
 func (l *Life) Run() {
@@ -191,9 +192,9 @@ func (l *Life) Run() {
 		t := time.Now()
 		l.Step()
 		/*
-		if l.Done() {
-			break
-		}
+			if l.Done() {
+				break
+			}
 		*/
 		time.Sleep(l.Delay - time.Now().Sub(t))
 	}

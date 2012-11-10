@@ -7,8 +7,8 @@ import (
 	"log"
 	"runtime"
 
-	"dasa.cc/cell/input"
 	"dasa.cc/cell/automata"
+	"dasa.cc/cell/input"
 )
 
 var flagSize = flag.Int("size", 640, "width and height of cell grid")

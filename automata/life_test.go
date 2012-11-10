@@ -9,7 +9,7 @@ func Benchmark_len(b *testing.B) {
 	var arr []bool = make([]bool, 50*50)
 	b.StartTimer()
 	for i := 0; i < b.N; i++ {
-		_ = 50*len(arr)+20
+		_ = 50*len(arr) + 20
 	}
 }
 
@@ -19,7 +19,7 @@ func Benchmark_static(b *testing.B) {
 	l := len(arr)
 	b.StartTimer()
 	for i := 0; i < b.N; i++ {
-		_ = 50*l+20
+		_ = 50*l + 20
 	}
 }
 
