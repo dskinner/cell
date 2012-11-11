@@ -2,6 +2,7 @@ package input
 
 import (
 	"github.com/jteeuwen/glfw"
+	"log"
 )
 
 var ModShift bool
@@ -10,7 +11,14 @@ var ModCtrl bool
 
 func keyHandler(key int, state int) {
 
+
+	log.Println(key)
+
 	switch key {
+	case 67:
+		Sim.SetRuler("conway")
+	case 87:
+		Sim.SetRuler("wolfram")
 	case glfw.KeyLshift, glfw.KeyRshift:
 		ModShift = (state == 1)
 	case glfw.KeyLalt, glfw.KeyRalt:

@@ -16,10 +16,17 @@ type Life struct {
 	Delay      time.Duration
 	Generation float64
 	Running    bool
+
+	ruler Ruler
 }
 
-func NewLife(size int, delay string, seed int64) (l *Life) {
+func NewLife(name string, size int, delay string, seed int64) (l *Life) {
 	l = new(Life)
+
+	if err := l.SetRuler(name); err != nil {
+		log.Fatal(err)
+	}
+
 	l.Cells = make([]bool, size*size)
 	l.Future = make([]bool, size*size)
 	l.Size = size
@@ -44,6 +51,12 @@ func NewLife(size int, delay string, seed int64) (l *Life) {
 	}
 
 	return l
+}
+
+func (l *Life) SetRuler(name string) (err error) {
+	r, err := NewRuler(name)
+	l.ruler = r
+	return err
 }
 
 func (l *Life) Pos(row, col int) int {
@@ -79,7 +92,7 @@ func (l *Life) MakeObject(name string) {
 func (l *Life) Step() {
 	// determine the future
 	for i := range l.Cells {
-		l.Future[i] = l.IsAlive(i)
+		l.Future[i] = l.ruler.Rule(l, i)
 	}
 
 	// swap the pointers
@@ -94,93 +107,6 @@ func (l *Life) Done() bool {
 		}
 	}
 	return true
-}
-
-func (l *Life) IsAlive(i int) bool {
-	count := 0
-	//var t, tl, tr bool
-
-	// Each cell has eight neighbors. For cells along the grid boundary,
-	// neighbors are considered by wrapping the grid
-
-	// left
-	if l.Cells[l.BoundValue(i-1)] {
-		count++
-	}
-
-	// right
-	if l.Cells[l.BoundValue(i+1)] {
-		count++
-	}
-
-	// top
-	if l.Cells[l.BoundValue(i-l.Size)] {
-		count++
-		//t = true
-	}
-
-	// bottom
-	if l.Cells[l.BoundValue(i+l.Size)] {
-		count++
-	}
-
-	// top left
-	if l.Cells[l.BoundValue(i-(l.Size-1))] {
-		count++
-		//tl = true
-	}
-
-	// top right
-	if l.Cells[l.BoundValue(i-(l.Size+1))] {
-		count++
-		//tr = true
-	}
-
-	// bottom left
-	if l.Cells[l.BoundValue(i+(l.Size-1))] {
-		count++
-	}
-
-	// bottom right
-	if l.Cells[l.BoundValue(i+(l.Size+1))] {
-		count++
-	}
-
-	// the rules of life
-
-	if l.Cells[i] && (count == 2 || count == 3) {
-		return true
-	}
-	if !l.Cells[i] && count == 3 {
-		return true
-	}
-	return false
-
-	/*
-		if tl && t && tr {
-			return false
-		}
-		if tl && t && !tr {
-			return false
-		}
-		if tl && !t && tr {
-			return false
-		}
-		if tl && !t && !tr {
-			return true
-		}
-		if !tl && t && tr {
-			return false
-		}
-		if !tl && t && !tr {
-			return false
-		}
-		if !tl && !t && tr {
-			return true
-		}
-
-		return l.Cells[i]
-	*/
 }
 
 func (l *Life) Run() {

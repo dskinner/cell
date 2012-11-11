@@ -6,17 +6,19 @@ import (
 	"github.com/jteeuwen/glfw"
 	"log"
 	"runtime"
-
+	"fmt"
 	"dasa.cc/cell/automata"
 	"dasa.cc/cell/input"
 )
 
+var flagListRules = flag.Bool("list-rules", false, "list all available rules and exit")
+var flagRule = flag.String("rule", "conway", "rule to use for determining cell life and death")
 var flagSize = flag.Int("size", 640, "width and height of cell grid")
-var flagSeed = flag.Int64("seed", 1, "value given for PRNG")
+var flagSeed = flag.Int64("seed", 1, "value given for PRNG, initial grid is empty if zero is given")
 var flagDelay = flag.String("delay", "33ms", "value given in milliseconds to pause between steps")
 
 const (
-	Title  = "Universe"
+	Title  = "Cell"
 	Width  = 640
 	Height = 640
 )
@@ -24,8 +26,15 @@ const (
 var life *automata.Life
 
 func main() {
-	runtime.GOMAXPROCS(2)
+	runtime.GOMAXPROCS(runtime.NumCPU())
 	flag.Parse()
+
+	if *flagListRules {
+		for _, name := range automata.Rulers() {
+			fmt.Println(name)
+		}
+		return
+	}
 
 	if err := glfw.Init(); err != nil {
 		log.Fatal(err)
@@ -57,7 +66,7 @@ func main() {
 
 func initScene() {
 	input.Init()
-	life = automata.NewLife(*flagSize, *flagDelay, *flagSeed)
+	life = automata.NewLife(*flagRule, *flagSize, *flagDelay, *flagSeed)
 	input.Sim = life
 	go life.Run()
 	gl.ClearColor(0.0, 0.0, 0.0, 0.0)
